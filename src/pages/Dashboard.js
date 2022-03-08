@@ -11,9 +11,9 @@ import TrafficByDevice from 'src/components/dashboard//TrafficByDevice';
 
 const Dashboard = () => (
   <>
-    {/* <Helmet>
+    <Helmet>
       <title>Dashboard | H4TC</title>
-    </Helmet> */}
+    </Helmet>
     <Box
       sx={{
         backgroundColor: 'background.default',
