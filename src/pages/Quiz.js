@@ -9,7 +9,9 @@ const Quiz = () => {
     <div className="mt-2">
       <div>
         <Container maxWidth={false}>
-          <div className="text-right">{/* <Addquestion /> */}</div>
+          <div className="text-right">
+            <Addquestion />
+          </div>
           <br></br>
           <Quiztable customers={customers} />
         </Container>
