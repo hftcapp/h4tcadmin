@@ -16,8 +16,9 @@ import {
   Typography
 } from '@material-ui/core';
 import getInitials from 'src/utils/getInitials';
+import Product from '../../assets/product.png';
 
-const CustomerListResults = ({ customers, ...rest }) => {
+const Paymentstable = ({ customers, ...rest }) => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
@@ -76,10 +77,11 @@ const CustomerListResults = ({ customers, ...rest }) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell>Location</TableCell>
-                <TableCell>Birth Date</TableCell>
+                <TableCell>Payment User</TableCell>
+                <TableCell>Amount</TableCell>
+                <TableCell>Date</TableCell>
+
+                <TableCell>Status</TableCell>
                 <TableCell>Delete</TableCell>
               </TableRow>
             </TableHead>
@@ -97,19 +99,29 @@ const CustomerListResults = ({ customers, ...rest }) => {
                         display: 'flex'
                       }}
                     >
-                      <Avatar src={customer.avatarUrl} sx={{ mr: 2 }}>
+                      {/* <Avatar src={Product} sx={{ mr: 2 }}>
                         {getInitials(customer.name)}
-                      </Avatar>
+                      </Avatar> */}
                       <Typography color="textPrimary" variant="body1">
                         {customer.name}
                       </Typography>
                     </Box>
                   </TableCell>
-                  <TableCell>{customer.email}</TableCell>
+                  <TableCell>200$</TableCell>
+                  <TableCell>3-March-2022</TableCell>
+
                   <TableCell>
-                    {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
+                    <span
+                      style={{
+                        backgroundColor: 'rgba(175, 250, 197, 0.5)',
+                        color: '#6EFC97',
+                        borderRadius: '25px'
+                      }}
+                      className="px-3 py-1"
+                    >
+                      Paid
+                    </span>
                   </TableCell>
-                  <TableCell>{customer.phone}</TableCell>
                   <TableCell>
                     <button className="btn btn-danger">
                       Delete <i class="far fa-trash-alt"></i>
@@ -121,21 +133,12 @@ const CustomerListResults = ({ customers, ...rest }) => {
           </Table>
         </Box>
       </PerfectScrollbar>
-      {/* <TablePagination
-        component="div"
-        count={customers.length}
-        onPageChange={handlePageChange}
-        onRowsPerPageChange={handleLimitChange}
-        page={page}
-        rowsPerPage={limit}
-        rowsPerPageOptions={[5, 10, 25]}
-      /> */}
     </Card>
   );
 };
 
-CustomerListResults.propTypes = {
+Paymentstable.propTypes = {
   customers: PropTypes.array.isRequired
 };
 
-export default CustomerListResults;
+export default Paymentstable;

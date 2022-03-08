@@ -19,13 +19,18 @@ import {
   ShoppingBag as ShoppingBagIcon,
   User as UserIcon,
   UserPlus as UserPlusIcon,
-  Users as UsersIcon
+  Users as UsersIcon,
+  Book,
+  CreditCard,
+  Scissors,
+  AlignCenter,
+  Link
 } from 'react-feather';
 import NavItem from './NavItem';
 
 const user = {
   avatar: '/static/images/avatars/avatar_6.png',
-  jobTitle: 'Senior Developer',
+  jobTitle: 'Admin',
   name: 'Katarina Smith'
 };
 
@@ -43,33 +48,48 @@ const items = [
   {
     href: '/app/products',
     icon: ShoppingBagIcon,
-    title: 'Products'
+    title: 'Manage Products'
   },
   {
-    href: '/app/account',
+    href: '/app/quiz',
+    icon: Book,
+    title: 'Quiz'
+  },
+  {
+    href: '/app/community',
     icon: UserIcon,
-    title: 'Account'
+    title: 'Community'
   },
   {
-    href: '/app/settings',
-    icon: SettingsIcon,
-    title: 'Settings'
+    href: '/app/payment',
+    icon: CreditCard,
+    title: 'Payment Details'
   },
   {
-    href: '/login',
-    icon: LockIcon,
-    title: 'Login'
+    href: '/app/quotes',
+    icon: AlignCenter,
+    title: 'Quotes'
   },
   {
-    href: '/register',
-    icon: UserPlusIcon,
-    title: 'Register'
+    href: '/app/productssuggestion',
+    icon: ShoppingBagIcon,
+    title: 'Products Recommendations'
   },
   {
-    href: '/404',
-    icon: AlertCircleIcon,
-    title: 'Error'
+    href: '/app/salons',
+    icon: Scissors,
+    title: 'Salons Recommendation'
+  },
+  {
+    href: '/app/styles',
+    icon: Link,
+    title: 'Styles Recommendations'
   }
+  // {
+  //   href: '/404',
+  //   icon: AlertCircleIcon,
+  //   title: 'Error'
+  // }
 ];
 
 const DashboardSidebar = ({ onMobileClose, openMobile }) => {
@@ -107,23 +127,17 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
           }}
           to="/app/account"
         />
-        <Typography
-          color="textPrimary"
-          variant="h5"
-        >
+        <Typography color="textPrimary" variant="h5">
           {user.name}
         </Typography>
-        <Typography
-          color="textSecondary"
-          variant="body2"
-        >
+        <Typography color="textSecondary" variant="body2">
           {user.jobTitle}
         </Typography>
       </Box>
       <Divider />
       <Box sx={{ p: 2 }}>
         <List>
-          {items.map((item) => (
+          {items.map(item => (
             <NavItem
               href={item.href}
               key={item.title}
@@ -134,43 +148,6 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
         </List>
       </Box>
       <Box sx={{ flexGrow: 1 }} />
-      <Box
-        sx={{
-          backgroundColor: 'background.default',
-          m: 2,
-          p: 2
-        }}
-      >
-        <Typography
-          align="center"
-          gutterBottom
-          variant="h4"
-        >
-          Need more?
-        </Typography>
-        <Typography
-          align="center"
-          variant="body2"
-        >
-          Upgrade to PRO version and access 20 more screens
-        </Typography>
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            pt: 2
-          }}
-        >
-          <Button
-            color="primary"
-            component="a"
-            href="https://react-material-kit.devias.io"
-            variant="contained"
-          >
-            See PRO version
-          </Button>
-        </Box>
-      </Box>
     </Box>
   );
 
@@ -217,7 +194,7 @@ DashboardSidebar.propTypes = {
 };
 
 DashboardSidebar.defaultProps = {
-  onMobileClose: () => { },
+  onMobileClose: () => {},
   openMobile: false
 };
 

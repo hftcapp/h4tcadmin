@@ -9,6 +9,9 @@ import NotFound from 'src/pages/NotFound';
 import ProductList from 'src/pages/ProductList';
 import Register from 'src/pages/Register';
 import Settings from 'src/pages/Settings';
+import Quiz from 'src/pages/Quiz';
+import Community from 'src/pages/Community';
+import Paymentdetails from 'src/pages/Paymentdetails';
 
 const routes = [
   {
@@ -20,6 +23,9 @@ const routes = [
       { path: 'dashboard', element: <Dashboard /> },
       { path: 'products', element: <ProductList /> },
       { path: 'settings', element: <Settings /> },
+      { path: 'quiz', element: <Quiz /> },
+      { path: 'community', element: <Community /> },
+      { path: 'payment', element: <Paymentdetails /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
   },

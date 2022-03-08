@@ -16,8 +16,9 @@ import {
   Typography
 } from '@material-ui/core';
 import getInitials from 'src/utils/getInitials';
+import Product from '../../assets/product.png';
 
-const CustomerListResults = ({ customers, ...rest }) => {
+const ProductsListResults = ({ customers, ...rest }) => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
@@ -77,9 +78,10 @@ const CustomerListResults = ({ customers, ...rest }) => {
             <TableHead>
               <TableRow>
                 <TableCell>Name</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell>Location</TableCell>
-                <TableCell>Birth Date</TableCell>
+                <TableCell>Price</TableCell>
+                <TableCell>Quantity</TableCell>
+
+                <TableCell>Edit</TableCell>
                 <TableCell>Delete</TableCell>
               </TableRow>
             </TableHead>
@@ -97,7 +99,7 @@ const CustomerListResults = ({ customers, ...rest }) => {
                         display: 'flex'
                       }}
                     >
-                      <Avatar src={customer.avatarUrl} sx={{ mr: 2 }}>
+                      <Avatar src={Product} sx={{ mr: 2 }}>
                         {getInitials(customer.name)}
                       </Avatar>
                       <Typography color="textPrimary" variant="body1">
@@ -109,7 +111,12 @@ const CustomerListResults = ({ customers, ...rest }) => {
                   <TableCell>
                     {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
                   </TableCell>
-                  <TableCell>{customer.phone}</TableCell>
+
+                  <TableCell>
+                    <button className="btn btn-primary">
+                      Edit <i class="far fa-edit"></i>
+                    </button>
+                  </TableCell>
                   <TableCell>
                     <button className="btn btn-danger">
                       Delete <i class="far fa-trash-alt"></i>
@@ -121,21 +128,12 @@ const CustomerListResults = ({ customers, ...rest }) => {
           </Table>
         </Box>
       </PerfectScrollbar>
-      {/* <TablePagination
-        component="div"
-        count={customers.length}
-        onPageChange={handlePageChange}
-        onRowsPerPageChange={handleLimitChange}
-        page={page}
-        rowsPerPage={limit}
-        rowsPerPageOptions={[5, 10, 25]}
-      /> */}
     </Card>
   );
 };
 
-CustomerListResults.propTypes = {
+ProductsListResults.propTypes = {
   customers: PropTypes.array.isRequired
 };
 
-export default CustomerListResults;
+export default ProductsListResults;
