@@ -9,9 +9,9 @@ import customers from 'src/__mocks__/customers';
 
 const ProductList = () => (
   <>
-    {/* <Helmet>
+    <Helmet>
       <title>Products | H4TC</title>
-    </Helmet> */}
+    </Helmet>
     <Box
       sx={{
         backgroundColor: 'background.default',
