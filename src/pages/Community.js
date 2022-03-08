@@ -12,7 +12,7 @@ const Community = () => {
               Set Api Keys of your Facebook account
             </h3>
           </div>
-          {/* <Form /> */}
+          <Form />
         </Container>
       </div>
     </div>

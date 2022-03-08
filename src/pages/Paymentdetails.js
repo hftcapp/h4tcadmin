@@ -32,7 +32,7 @@ const Paymentdetails = () => {
             </div>
           </div>
           <br />
-          <Paymentstable customers={customers} />
+          {/* <Paymentstable customers={customers} /> */}
         </Container>
       </div>
     </div>
