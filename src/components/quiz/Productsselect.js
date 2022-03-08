@@ -18,7 +18,7 @@ import {
 import getInitials from 'src/utils/getInitials';
 import Product from '../../assets/product.png';
 
-const Quiztable = ({ customers, ...rest }) => {
+const ProductsListResults = ({ customers, ...rest }) => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
@@ -77,10 +77,11 @@ const Quiztable = ({ customers, ...rest }) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Question</TableCell>
-                <TableCell>Options</TableCell>
-                <TableCell>Edit</TableCell>
-                <TableCell>Delete</TableCell>
+                <TableCell>Name</TableCell>
+                <TableCell>Price</TableCell>
+                <TableCell>Quantity</TableCell>
+
+                <TableCell>Select</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -97,29 +98,29 @@ const Quiztable = ({ customers, ...rest }) => {
                         display: 'flex'
                       }}
                     >
-                      {/* <Avatar src={Product} sx={{ mr: 2 }}>
+                      <Avatar src={Product} sx={{ mr: 2 }}>
                         {getInitials(customer.name)}
-                      </Avatar> */}
+                      </Avatar>
                       <Typography color="textPrimary" variant="body1">
                         {customer.name}
                       </Typography>
                     </Box>
                   </TableCell>
-                  <TableCell>Strong , Midium , Week</TableCell>
-                  {/* <TableCell>
+                  <TableCell>{customer.email}</TableCell>
+                  <TableCell>
                     {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
-                  </TableCell> */}
+                  </TableCell>
 
                   <TableCell>
                     <button className="btn btn-primary">
-                      Edit <i class="far fa-edit"></i>
+                      Select <i class="far fa-hand-pointer"></i>
                     </button>
                   </TableCell>
-                  <TableCell>
+                  {/* <TableCell>
                     <button className="btn btn-danger">
                       Delete <i class="far fa-trash-alt"></i>
                     </button>
-                  </TableCell>
+                  </TableCell> */}
                 </TableRow>
               ))}
             </TableBody>
@@ -130,8 +131,8 @@ const Quiztable = ({ customers, ...rest }) => {
   );
 };
 
-Quiztable.propTypes = {
+ProductsListResults.propTypes = {
   customers: PropTypes.array.isRequired
 };
 
-export default Quiztable;
+export default ProductsListResults;

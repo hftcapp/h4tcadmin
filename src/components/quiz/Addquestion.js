@@ -31,7 +31,7 @@ export default function Addproduct() {
         Open form dialog
       </Button> */}
       <button className="btn btn-success " onClick={handleClickOpen}>
-        Add Question
+        <i class="fas fa-plus"></i> Add Question
       </button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Add Question</DialogTitle>
