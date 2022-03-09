@@ -12,6 +12,10 @@ import Settings from 'src/pages/Settings';
 import Quiz from 'src/pages/Quiz';
 import Community from 'src/pages/Community';
 import Paymentdetails from 'src/pages/Paymentdetails';
+import Quotes from 'src/pages/Quotes';
+import Productrecommendation from 'src/pages/Productrecommendation';
+import Salonsrecommendation from 'src/pages/Salonsrecommendation';
+import Stylerecommendation from 'src/pages/Stylerecommendation';
 
 const routes = [
   {
@@ -26,6 +30,10 @@ const routes = [
       { path: 'quiz', element: <Quiz /> },
       { path: 'community', element: <Community /> },
       { path: 'payment', element: <Paymentdetails /> },
+      { path: 'quotes', element: <Quotes /> },
+      { path: 'productssuggestion', element: <Productrecommendation /> },
+      { path: 'salons', element: <Salonsrecommendation /> },
+      { path: 'styles', element: <Stylerecommendation /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
   },
