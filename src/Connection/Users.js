@@ -1,6 +1,6 @@
 import axios from 'axios';
-let url = 'http://localhost:3001';
-// let url = 'https://adsbackend2.herokuapp.com';
+// let url = 'http://localhost:3001';
+let url = 'https://hftcapi.herokuapp.com';
 
 const getUsers = async () => {
   let res = await axios.get(`${url}/api/users/`);
@@ -14,7 +14,5 @@ const deleteUser = async data => {
   console.log(res);
   return res;
 };
-
-
 
 export { getUsers, deleteUser };
