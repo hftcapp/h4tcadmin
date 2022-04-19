@@ -7,10 +7,45 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Imageupload from '../Imageupload';
+import { addProduct } from '../../Connection/Product';
+import { ToastContainer, toast } from 'react-toastify';
 
-export default function Addproduct() {
+export default function Addproduct({ handleUpdate }) {
   const [open, setOpen] = React.useState(false);
+  const [values, setValues] = React.useState({
+    name: '',
+    price: 0,
+    quantity: 0,
+    description: '',
+    ingredients: ''
+  });
 
+  const handleChange = evt => {
+    setValues({
+      ...values,
+      [evt.target.name]: evt.target.value
+    });
+  };
+
+  const handleSubmit = async () => {
+    handleClose();
+
+    const res = await addProduct(values);
+    console.log(res);
+    if (res.data.success) {
+      toast.success('Product Added', {
+        position: toast.POSITION.TOP_RIGHT
+      });
+      setValues({
+        name: '',
+        price: 0,
+        quantity: 0,
+        description: '',
+        ingredients: ''
+      });
+      handleUpdate();
+    }
+  };
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -21,8 +56,7 @@ export default function Addproduct() {
 
   const handleSelectedImages = imgs => {
     console.log(imgs);
-    // setValues({ ...values, images: imgs });
-    // setCarryOnDisabled(false);
+    setValues({ ...values, images: imgs });
   };
 
   return (
@@ -37,7 +71,7 @@ export default function Addproduct() {
         <DialogTitle>Add Product</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Add the Product to the platform later you wud be able to use them
+            Add the Product to the platform later you would be able to use them
             for recommendations
           </DialogContentText>
           <TextField
@@ -48,6 +82,9 @@ export default function Addproduct() {
             type="text"
             fullWidth
             variant="standard"
+            value={values.name}
+            onChange={handleChange}
+            name="name"
           />
           <TextField
             autoFocus
@@ -57,6 +94,9 @@ export default function Addproduct() {
             type="number"
             fullWidth
             variant="standard"
+            value={values.price}
+            onChange={handleChange}
+            name="price"
           />
           <TextField
             autoFocus
@@ -66,6 +106,9 @@ export default function Addproduct() {
             type="number"
             fullWidth
             variant="standard"
+            value={values.quantity}
+            onChange={handleChange}
+            name="quantity"
           />
           <TextField
             id="standard-multiline-static"
@@ -74,6 +117,9 @@ export default function Addproduct() {
             rows={4}
             variant="standard"
             fullWidth
+            value={values.description}
+            onChange={handleChange}
+            name="description"
           />
           <br />
           <TextField
@@ -83,6 +129,9 @@ export default function Addproduct() {
             rows={4}
             variant="standard"
             fullWidth
+            value={values.ingredients}
+            onChange={handleChange}
+            name="ingredients"
           />
           <br />
           <br />
@@ -90,7 +139,7 @@ export default function Addproduct() {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Add Product</Button>
+          <Button onClick={handleSubmit}>Add Product</Button>
         </DialogActions>
       </Dialog>
     </div>

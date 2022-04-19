@@ -13,9 +13,23 @@ import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
 import InputIcon from '@material-ui/icons/Input';
 import Logo from '../assets/logo.png';
+import { useAuth } from '../Context/Auth-Context';
+import { ToastContainer, toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 const DashboardNavbar = ({ onMobileNavOpen, ...rest }) => {
   const [notifications] = useState([]);
+  const { logout } = useAuth();
+  // const history = useHistory();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login', { replace: true });
+    toast.success('logged out successfully', {
+      position: toast.POSITION.TOP_RIGHT
+    });
+  };
 
   return (
     <AppBar style={{ backgroundColor: '#99CE85' }} elevation={0} {...rest}>
@@ -35,7 +49,7 @@ const DashboardNavbar = ({ onMobileNavOpen, ...rest }) => {
               <NotificationsIcon />
             </Badge>
           </IconButton>
-          <IconButton color="inherit">
+          <IconButton color="inherit" onClick={handleLogout}>
             <InputIcon />
           </IconButton>
         </Hidden>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import PerfectScrollbar from 'react-perfect-scrollbar';
@@ -16,19 +16,30 @@ import {
   Typography
 } from '@material-ui/core';
 import getInitials from 'src/utils/getInitials';
-import { deleteUser } from '../../Connection/Users';
-import { ToastContainer, toast } from 'react-toastify';
+import Product from '../../assets/product.png';
 
-const CustomerListResults = ({ customers, handleUpdate, ...rest }) => {
+const ProductsListResults = ({
+  products,
+  selectedProductsIds,
+  handleSubmit,
+  ...rest
+}) => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
+  const [existingProductsIds, setExistingProductsids] = useState();
+
+  useEffect(() => {
+    setExistingProductsids(selectedProductsIds);
+  }, []);
+
+  console.log(selectedProductsIds);
 
   const handleSelectAll = event => {
     let newSelectedCustomerIds;
 
     if (event.target.checked) {
-      newSelectedCustomerIds = customers.map(customer => customer.id);
+      newSelectedCustomerIds = products.map(customer => customer.id);
     } else {
       newSelectedCustomerIds = [];
     }
@@ -71,20 +82,16 @@ const CustomerListResults = ({ customers, handleUpdate, ...rest }) => {
     setPage(newPage);
   };
 
-  const handleDelete = async id => {
-    console.log(id);
-    let res = await deleteUser({ id: id });
-    console.log(res);
-    if (res.data.success === true) {
-      toast.success(res.data.message, {
-        position: toast.POSITION.TOP_RIGHT
-      });
-      handleUpdate();
-    } else {
-      toast.error(res.data.message, {
-        position: toast.POSITION.TOP_RIGHT
-      });
-    }
+  const handleRemove = id => {
+    let newData = existingProductsIds.filter(existingId => existingId !== id);
+    setExistingProductsids(newData);
+    handleSubmit(newData);
+  };
+
+  const handleAdd = id => {
+    let newData = [...existingProductsIds, id];
+    setExistingProductsids([...existingProductsIds, id]);
+    handleSubmit(newData);
   };
 
   return (
@@ -95,19 +102,18 @@ const CustomerListResults = ({ customers, handleUpdate, ...rest }) => {
             <TableHead>
               <TableRow>
                 <TableCell>Name</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell>Birth Date</TableCell>
-                <TableCell>Role</TableCell>
-                <TableCell>Email Verified</TableCell>
-                <TableCell>Delete</TableCell>
+                <TableCell>Price</TableCell>
+                <TableCell>Quantity</TableCell>
+
+                <TableCell>Select</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {customers.map(customer => (
+              {products.map(product => (
                 <TableRow
                   hover
-                  key={customer._id}
-                  selected={selectedCustomerIds.indexOf(customer._id) !== -1}
+                  key={products._id}
+                  // selected={selectedproductsIds.indexOf(products.id) !== -1}
                 >
                   <TableCell>
                     <Box
@@ -116,48 +122,52 @@ const CustomerListResults = ({ customers, handleUpdate, ...rest }) => {
                         display: 'flex'
                       }}
                     >
-                      <Avatar src={customer.image} sx={{ mr: 2 }}>
-                        {getInitials(customer.name)}
+                      <Avatar src={product.coverImage} sx={{ mr: 2 }}>
+                        {getInitials(product.name)}
                       </Avatar>
                       <Typography color="textPrimary" variant="body1">
-                        {customer.username}
+                        {product.name}
                       </Typography>
                     </Box>
                   </TableCell>
-                  <TableCell>{customer.email}</TableCell>
+                  <TableCell>{product.price}</TableCell>
+                  <TableCell>{product.quantity}</TableCell>
 
-                  <TableCell>{customer.birthday}</TableCell>
-                  <TableCell>{customer.role}</TableCell>
-                  <TableCell>{customer.emailVerified.toString()}</TableCell>
                   <TableCell>
-                    <button
-                      onClick={() => handleDelete(customer._id)}
-                      className="btn btn-danger"
-                    >
+                    {console.log(existingProductsIds)}
+                    {existingProductsIds?.indexOf(product._id) === -1 ? (
+                      <button
+                        onClick={() => handleAdd(product._id)}
+                        className="btn btn-primary"
+                      >
+                        Select <i class="far fa-hand-pointer"></i>
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => handleRemove(product._id)}
+                        className="btn btn-primary"
+                      >
+                        Un Select <i class="far fa-hand-pointer"></i>
+                      </button>
+                    )}
+                  </TableCell>
+                  {/* <TableCell>
+                    <button className="btn btn-danger">
                       Delete <i class="far fa-trash-alt"></i>
                     </button>
-                  </TableCell>
+                  </TableCell> */}
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </Box>
       </PerfectScrollbar>
-      {/* <TablePagination
-        component="div"
-        count={customers.length}
-        onPageChange={handlePageChange}
-        onRowsPerPageChange={handleLimitChange}
-        page={page}
-        rowsPerPage={limit}
-        rowsPerPageOptions={[5, 10, 25]}
-      /> */}
     </Card>
   );
 };
 
-CustomerListResults.propTypes = {
+ProductsListResults.propTypes = {
   customers: PropTypes.array.isRequired
 };
 
-export default CustomerListResults;
+export default ProductsListResults;

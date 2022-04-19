@@ -11,7 +11,7 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 // import CloseIcon from '@mui/icons-material/CloseIcon';
 import Slide from '@mui/material/Slide';
-import Productsselect from './Productsselect';
+import Productsselect from '../highscore/Productsselect';
 import { Box, Container, Grid, Pagination } from '@material-ui/core';
 
 const Transition = React.forwardRef(function Transition(props, ref) {

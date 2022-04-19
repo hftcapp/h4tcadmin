@@ -16,8 +16,11 @@ import Quotes from 'src/pages/Quotes';
 import Productrecommendation from 'src/pages/Productrecommendation';
 import Salonsrecommendation from 'src/pages/Salonsrecommendation';
 import Stylerecommendation from 'src/pages/Stylerecommendation';
+import Highscore from 'src/pages/Highscore';
+import Midscore from 'src/pages/Midscore';
+import Lowscore from 'src/pages/Lowscore';
 
-const routes = [
+export const Authroutes = [
   {
     path: 'app',
     element: <DashboardLayout />,
@@ -28,15 +31,23 @@ const routes = [
       { path: 'products', element: <ProductList /> },
       { path: 'settings', element: <Settings /> },
       { path: 'quiz', element: <Quiz /> },
+      { path: 'highscore', element: <Highscore /> },
+      { path: 'midscore', element: <Midscore /> },
+      { path: 'lowscore', element: <Lowscore /> },
+
       { path: 'community', element: <Community /> },
       { path: 'payment', element: <Paymentdetails /> },
       { path: 'quotes', element: <Quotes /> },
       { path: 'productssuggestion', element: <Productrecommendation /> },
       { path: 'salons', element: <Salonsrecommendation /> },
       { path: 'styles', element: <Stylerecommendation /> },
+      { path: '/', element: <Navigate to="/app/dashboard" /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
-  },
+  }
+];
+
+export const UnAuthroutes = [
   {
     path: '/',
     element: <MainLayout />,
@@ -44,10 +55,10 @@ const routes = [
       { path: 'login', element: <Login /> },
       { path: 'register', element: <Register /> },
       { path: '404', element: <NotFound /> },
-      { path: '/', element: <Navigate to="/app/dashboard" /> },
-      { path: '*', element: <Navigate to="/404" /> }
+      { path: '/', element: <Navigate to="/login" /> },
+      { path: '*', element: <Navigate to="/login" /> }
     ]
   }
 ];
 
-export default routes;
+// export default routes;

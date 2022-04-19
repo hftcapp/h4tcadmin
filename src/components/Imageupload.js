@@ -4,6 +4,7 @@ import Carousal from './Carousal';
 // import Button from "../Button/index";
 
 const Imageupload = props => {
+  console.log(props);
   const [file, setFile] = useState();
   const [previewUrl, setPreviewUrl] = useState();
   const [isValid, setIsValid] = useState();

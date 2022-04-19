@@ -17,17 +17,49 @@ import {
 } from '@material-ui/core';
 import getInitials from 'src/utils/getInitials';
 import Product from '../../assets/product.png';
+import Editquestion from './Editquestion';
+import { deleteQuestion } from '../../Connection/Quiz';
+import { ToastContainer, toast } from 'react-toastify';
 
-const Quiztable = ({ customers, ...rest }) => {
+const Quiztable = ({ questions, handleUpdate, ...rest }) => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
+
+  const [openEditQuestion, setOpenEditQuestion] = useState(false);
+  const [editQuestionData, setEditQuestionData] = useState();
+
+  const handleOpenEditQuestion = () => {
+    setOpenEditQuestion(!openEditQuestion);
+  };
+  const handleEditQuestion = question => {
+    console.log(question);
+    setEditQuestionData({
+      ...question
+    });
+    handleOpenEditQuestion();
+  };
+
+  const handleDelete = async id => {
+    let res = await deleteQuestion({ id });
+    console.log(res);
+    if (res.data.success) {
+      toast.success('Question Deleted', {
+        position: toast.POSITION.TOP_RIGHT
+      });
+      handleUpdate();
+    } else {
+      toast.error(res.json.message, {
+        position: toast.POSITION.TOP_RIGHT
+      });
+    }
+  };
 
   const handleSelectAll = event => {
     let newSelectedCustomerIds;
 
     if (event.target.checked) {
-      newSelectedCustomerIds = customers.map(customer => customer.id);
+      newSelectedCustomerIds = questions.map(customer => customer.id);
     } else {
       newSelectedCustomerIds = [];
     }
@@ -71,62 +103,83 @@ const Quiztable = ({ customers, ...rest }) => {
   };
 
   return (
-    <Card {...rest}>
-      <PerfectScrollbar>
-        <Box sx={{ minWidth: 1050 }}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Question</TableCell>
-                <TableCell>Options</TableCell>
-                <TableCell>Edit</TableCell>
-                <TableCell>Delete</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {customers.map(customer => (
-                <TableRow
-                  hover
-                  key={customer.id}
-                  selected={selectedCustomerIds.indexOf(customer.id) !== -1}
-                >
-                  <TableCell>
-                    <Box
-                      sx={{
-                        alignItems: 'center',
-                        display: 'flex'
-                      }}
+    <div>
+      <div>
+        <Card {...rest}>
+          <PerfectScrollbar>
+            <Box sx={{ minWidth: 1050 }}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Question</TableCell>
+                    <TableCell>Options</TableCell>
+                    <TableCell>Edit</TableCell>
+                    <TableCell>Delete</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {questions.map(question => (
+                    <TableRow
+                      hover
+                      key={question._id}
+                      // selected={selectedQuestionIds.indexOf(question._id) !== -1}
                     >
-                      {/* <Avatar src={Product} sx={{ mr: 2 }}>
-                        {getInitials(customer.name)}
-                      </Avatar> */}
-                      <Typography color="textPrimary" variant="body1">
-                        {customer.name}
-                      </Typography>
-                    </Box>
-                  </TableCell>
-                  <TableCell>Strong , Midium , Week</TableCell>
-                  {/* <TableCell>
-                    {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
-                  </TableCell> */}
+                      <TableCell>
+                        <Box
+                          sx={{
+                            alignItems: 'center',
+                            display: 'flex'
+                          }}
+                        >
+                          {/* <Avatar src={Product} sx={{ mr: 2 }}>
+                      {getInitials(question.name)}
+                    </Avatar> */}
+                          <Typography color="textPrimary" variant="body1">
+                            {question.question}
+                          </Typography>
+                        </Box>
+                      </TableCell>
+                      <TableCell>
+                        {question.option1} , {question.option2} ,{' '}
+                        {question.option3}
+                      </TableCell>
+                      {/* <TableCell>
+                  {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
+                </TableCell> */}
 
-                  <TableCell>
-                    <button className="btn btn-primary">
-                      Edit <i class="far fa-edit"></i>
-                    </button>
-                  </TableCell>
-                  <TableCell>
-                    <button className="btn btn-danger">
-                      Delete <i class="far fa-trash-alt"></i>
-                    </button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Box>
-      </PerfectScrollbar>
-    </Card>
+                      <TableCell>
+                        <button
+                          onClick={() => handleEditQuestion(question)}
+                          className="btn btn-primary"
+                        >
+                          Edit <i class="far fa-edit"></i>
+                        </button>
+                      </TableCell>
+                      <TableCell>
+                        <button
+                          onClick={() => handleDelete(question._id)}
+                          className="btn btn-danger"
+                        >
+                          Delete <i class="far fa-trash-alt"></i>
+                        </button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Box>
+          </PerfectScrollbar>
+        </Card>
+      </div>
+      {editQuestionData && (
+        <Editquestion
+          handleOpen={handleOpenEditQuestion}
+          open={openEditQuestion}
+          data={editQuestionData}
+          handleUpdate={handleUpdate}
+        />
+      )}
+    </div>
   );
 };
 

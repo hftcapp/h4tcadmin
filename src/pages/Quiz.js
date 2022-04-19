@@ -1,25 +1,41 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Addquestion from '../components/quiz/Addquestion';
 import { Box, Container, Grid, Pagination } from '@material-ui/core';
 import Quiztable from '../components/quiz/Quiztable';
 import customers from 'src/__mocks__/customers';
-import Highscore from '../components/quiz/Highscore';
-import Midscore from '../components/quiz/Midscore';
-import Lowscore from '../components/quiz/Lowscore';
+import { getQuestions } from '../Connection/Quiz';
 
 const Quiz = () => {
+  const [questions, setQuestions] = useState();
+  const [update, setUpdate] = useState(false);
+
+  const handleUpdate = () => {
+    setUpdate(true);
+  };
+
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      let res = await getQuestions();
+      console.log(res);
+      setQuestions(res.data.questions);
+    };
+    fetchQuestions();
+    setUpdate(false);
+  }, [update === true]);
   return (
     <div className="mt-2">
       <div>
         <Container maxWidth={false}>
           <div className=" mt-3  d-flex justify-content-end">
-            <Addquestion />
-            <Highscore customers={customers} />
+            <Addquestion handleUpdate={handleUpdate} />
+            {/* <Highscore customers={customers} />
             <Midscore customers={customers} />
-            <Lowscore customers={customers} />
+            <Lowscore customers={customers} /> */}
           </div>
           <br></br>
-          <Quiztable customers={customers} />
+          {questions && (
+            <Quiztable questions={questions} handleUpdate={handleUpdate} />
+          )}
         </Container>
       </div>
     </div>

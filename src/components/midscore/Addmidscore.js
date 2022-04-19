@@ -13,20 +13,47 @@ import Typography from '@mui/material/Typography';
 import Slide from '@mui/material/Slide';
 import Productsselect from './Productsselect';
 import { Box, Container, Grid, Pagination } from '@material-ui/core';
+import { ToastContainer, toast } from 'react-toastify';
+import { addList } from '../../Connection/Productscorerecom';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function FullScreenDialog({ customers }) {
+export default function FullScreenDialog({
+  products,
+  selectedProductsIds,
+  handleUpdate
+}) {
   const [open, setOpen] = React.useState(false);
-
+  const [listData, setListData] = React.useState();
   const handleClickOpen = () => {
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleSubmit = data => {
+    console.log(data);
+    setListData(data);
+  };
+
+  const handleSave = async () => {
+    handleClose();
+    let res = await addList({ name: 2, products: listData });
+    console.log(res);
+    if (res.data.success) {
+      toast.success('Product List Updated', {
+        position: toast.POSITION.TOP_RIGHT
+      });
+      handleUpdate();
+    } else {
+      toast.error('Product List Failed', {
+        position: toast.POSITION.TOP_RIGHT
+      });
+    }
   };
 
   return (
@@ -36,7 +63,7 @@ export default function FullScreenDialog({ customers }) {
         variant="outlined"
         onClick={handleClickOpen}
       >
-        <i class="far fa-hand-pointer"></i> Choose high Score Products
+        <i class="far fa-hand-pointer"></i> Choose Mid Score Products
       </button>
       <Dialog
         fullScreen
@@ -61,13 +88,18 @@ export default function FullScreenDialog({ customers }) {
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
               Choose Products
             </Typography>
-            <Button autoFocus color="inherit" onClick={handleClose}>
+            <Button onClick={handleSave} autoFocus color="inherit">
               save
             </Button>
           </Toolbar>
         </AppBar>
         <Container>
-          <Productsselect className="mt-4" customers={customers} />
+          <Productsselect
+            selectedProductsIds={selectedProductsIds}
+            className="mt-4"
+            products={products}
+            handleSubmit={handleSubmit}
+          />
         </Container>
       </Dialog>
     </div>

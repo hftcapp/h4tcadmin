@@ -17,17 +17,50 @@ import {
 } from '@material-ui/core';
 import getInitials from 'src/utils/getInitials';
 import Product from '../../assets/product.png';
+import Editquote from './Editquote';
+import { ToastContainer, toast } from 'react-toastify';
 
-const Quotestable = ({ customers, ...rest }) => {
+import { deleteQuote } from '../../Connection/Quotes';
+
+const Quotestable = ({ quotes, handleUpdate, ...rest }) => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
+
+  const [openEdit, setOpenEdit] = useState(false);
+  const [editData, setEditData] = useState();
+
+  const handleOpenEdit = () => {
+    setOpenEdit(!openEdit);
+  };
+  const handleEdit = quote => {
+    console.log(quote);
+    setEditData({
+      ...quote
+    });
+    handleOpenEdit();
+  };
+
+  const handleDelete = async id => {
+    let res = await deleteQuote({ id });
+    console.log(res);
+    if (res.data.success) {
+      toast.success('Quote Deleted', {
+        position: toast.POSITION.TOP_RIGHT
+      });
+      handleUpdate();
+    } else {
+      toast.error(res.json.message, {
+        position: toast.POSITION.TOP_RIGHT
+      });
+    }
+  };
 
   const handleSelectAll = event => {
     let newSelectedCustomerIds;
 
     if (event.target.checked) {
-      newSelectedCustomerIds = customers.map(customer => customer.id);
+      newSelectedCustomerIds = quotes.map(customer => customer.id);
     } else {
       newSelectedCustomerIds = [];
     }
@@ -71,61 +104,80 @@ const Quotestable = ({ customers, ...rest }) => {
   };
 
   return (
-    <Card {...rest}>
-      <PerfectScrollbar>
-        <Box sx={{ minWidth: 1050 }}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Quote</TableCell>
-                <TableCell>Edit</TableCell>
-                <TableCell>Delete</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {customers.map(customer => (
-                <TableRow
-                  hover
-                  key={customer.id}
-                  selected={selectedCustomerIds.indexOf(customer.id) !== -1}
-                >
-                  <TableCell>
-                    <Box
-                      sx={{
-                        alignItems: 'center',
-                        display: 'flex'
-                      }}
+    <div>
+      <div>
+        <Card {...rest}>
+          <PerfectScrollbar>
+            <Box sx={{ minWidth: 1050 }}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Quote</TableCell>
+                    <TableCell>Number of Day</TableCell>
+                    <TableCell>Edit</TableCell>
+                    <TableCell>Delete</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {quotes.map(quote => (
+                    <TableRow
+                      hover
+                      key={quote.id}
+                      // selected={selectedquoteIds.indexOf(quote.id) !== -1}
                     >
-                      {/* <Avatar src={Product} sx={{ mr: 2 }}>
-                        {getInitials(customer.name)}
-                      </Avatar> */}
-                      <Typography color="textPrimary" variant="body1">
-                        {customer.name}
-                      </Typography>
-                    </Box>
-                  </TableCell>
-                  {/* <TableCell>Strong , Midium , Week</TableCell> */}
-                  {/* <TableCell>
-                    {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
-                  </TableCell> */}
+                      <TableCell>
+                        <Box
+                          sx={{
+                            alignItems: 'center',
+                            display: 'flex'
+                          }}
+                        >
+                          {/* <Avatar src={Product} sx={{ mr: 2 }}>
+                      {getInitials(quote.name)}
+                    </Avatar> */}
+                          <Typography color="textPrimary" variant="body1">
+                            {quote.quote}
+                          </Typography>
+                        </Box>
+                      </TableCell>
+                      <TableCell>{quote.number}</TableCell>
+                      {/* <TableCell>
+                  {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
+                </TableCell> */}
 
-                  <TableCell>
-                    <button className="btn btn-primary">
-                      Edit <i class="far fa-edit"></i>
-                    </button>
-                  </TableCell>
-                  <TableCell>
-                    <button className="btn btn-danger">
-                      Delete <i class="far fa-trash-alt"></i>
-                    </button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Box>
-      </PerfectScrollbar>
-    </Card>
+                      <TableCell>
+                        <button
+                          onClick={() => handleEdit(quote)}
+                          className="btn btn-primary"
+                        >
+                          Edit <i class="far fa-edit"></i>
+                        </button>
+                      </TableCell>
+                      <TableCell>
+                        <button
+                          onClick={() => handleDelete(quote._id)}
+                          className="btn btn-danger"
+                        >
+                          Delete <i class="far fa-trash-alt"></i>
+                        </button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Box>
+          </PerfectScrollbar>
+        </Card>
+      </div>
+      {editData && (
+        <Editquote
+          handleOpen={handleOpenEdit}
+          open={openEdit}
+          data={editData}
+          handleUpdate={handleUpdate}
+        />
+      )}
+    </div>
   );
 };
 

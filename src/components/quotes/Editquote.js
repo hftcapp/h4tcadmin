@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useEffect } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -7,15 +8,20 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Imageupload from '../Imageupload';
-import { addQuote } from '../../Connection/Quotes';
+import { editQuote } from '../../Connection/Quotes';
 import { ToastContainer, toast } from 'react-toastify';
 
-export default function Addquotes({ handleUpdate }) {
-  const [open, setOpen] = React.useState(false);
+export default function Editquote({ handleUpdate, open, data, handleOpen }) {
+  //   const [open, setOpen] = React.useState(false);
   const [values, setValues] = React.useState({
     quote: '',
     number: 0
   });
+
+  useEffect(() => {
+    setValues(data);
+    console.log(data);
+  }, [data]);
 
   const handleChange = evt => {
     setValues({
@@ -24,15 +30,11 @@ export default function Addquotes({ handleUpdate }) {
     });
   };
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
   const handleSubmit = async () => {
-    handleClose();
-    let res = await addQuote(values);
+    handleOpen();
+    let res = await editQuote(values);
     if (res.data.success) {
-      toast.success('Quote Added', {
+      toast.success('Quote Updated', {
         position: toast.POSITION.TOP_RIGHT
       });
       setValues({
@@ -47,10 +49,6 @@ export default function Addquotes({ handleUpdate }) {
     }
   };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   const handleSelectedImages = imgs => {
     console.log(imgs);
     // setValues({ ...values, images: imgs });
@@ -59,17 +57,15 @@ export default function Addquotes({ handleUpdate }) {
 
   return (
     <div>
-      {/* <Button variant="outlined" onClick={handleClickOpen}>
+      {/* <Button variant="outlined" onClick={handleOpen}>
         Open form dialog
       </Button> */}
-      <button className="btn btn-success " onClick={handleClickOpen}>
-        <i class="fas fa-plus"></i> Add Quote
-      </button>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Add Quote</DialogTitle>
+
+      <Dialog open={open} onClose={handleOpen}>
+        <DialogTitle>Edit Quote</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Add new Quote for showing up on the Splash Screen of the App
+            Edit Quote for showing up on the Splash Screen of the App
           </DialogContentText>
           <TextField
             autoFocus
@@ -97,8 +93,8 @@ export default function Addquotes({ handleUpdate }) {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleSubmit}>Add Quote</Button>
+          <Button onClick={handleOpen}>Cancel</Button>
+          <Button onClick={handleSubmit}>Update Quote</Button>
         </DialogActions>
       </Dialog>
     </div>

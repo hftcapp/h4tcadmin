@@ -1,4 +1,5 @@
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
@@ -13,9 +14,51 @@ import {
 } from '@material-ui/core';
 import FacebookIcon from 'src/icons/Facebook';
 import GoogleIcon from 'src/icons/Google';
+import { loginUser } from '../Connection/Auth';
+import { ToastContainer, toast } from 'react-toastify';
+import { useAuth } from '../Context/Auth-Context';
 
 const Login = () => {
   const navigate = useNavigate();
+  const { login, loggedIn } = useAuth();
+
+  const [data, setData] = useState({
+    email: '',
+    password: ''
+  });
+
+  const handleDataChange = evt => {
+    setData({
+      ...data,
+      [evt.target.name]: evt.target.value
+    });
+  };
+
+  const handleDataSubmit = async evt => {
+    evt.preventDefault();
+    console.log(data);
+
+    let res = await loginUser(data);
+    console.log(res);
+    if (res.data.success === true) {
+      toast.success(res.data.message, {
+        position: toast.POSITION.TOP_RIGHT
+      });
+      login();
+      window.localStorage.setItem('username', res.data.username);
+      window.localStorage.setItem('accessToken', res.data.access_token);
+      window.localStorage.setItem('email', res.data.email);
+      window.localStorage.setItem('id', res.data.id);
+      window.localStorage.setItem('image', res.data.profileImage);
+      window.localStorage.setItem('role', res.data.role);
+      // history.push("/");
+      navigate('/app/dashboard', { replace: true });
+    } else {
+      toast.error(res.data.message, {
+        position: toast.POSITION.TOP_RIGHT
+      });
+    }
+  };
 
   return (
     <>
@@ -38,12 +81,17 @@ const Login = () => {
               password: 'Password123'
             }}
             validationSchema={Yup.object().shape({
-              email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-              password: Yup.string().max(255).required('Password is required')
+              email: Yup.string()
+                .email('Must be a valid email')
+                .max(255)
+                .required('Email is required'),
+              password: Yup.string()
+                .max(255)
+                .required('Password is required')
             })}
-            onSubmit={() => {
-              navigate('/app/dashboard', { replace: true });
-            }}
+            // onSubmit={() => {
+            //   navigate('/app/dashboard', { replace: true });
+            // }}
           >
             {({
               errors,
@@ -54,12 +102,9 @@ const Login = () => {
               touched,
               values
             }) => (
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleDataSubmit}>
                 <Box sx={{ mb: 3 }}>
-                  <Typography
-                    color="textPrimary"
-                    variant="h2"
-                  >
+                  <Typography color="textPrimary" variant="h2">
                     Sign in
                   </Typography>
                   <Typography
@@ -70,56 +115,7 @@ const Login = () => {
                     Sign in on the internal platform
                   </Typography>
                 </Box>
-                <Grid
-                  container
-                  spacing={3}
-                >
-                  <Grid
-                    item
-                    xs={12}
-                    md={6}
-                  >
-                    <Button
-                      color="primary"
-                      fullWidth
-                      startIcon={<FacebookIcon />}
-                      onClick={handleSubmit}
-                      size="large"
-                      variant="contained"
-                    >
-                      Login with Facebook
-                    </Button>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={12}
-                    md={6}
-                  >
-                    <Button
-                      fullWidth
-                      startIcon={<GoogleIcon />}
-                      onClick={handleSubmit}
-                      size="large"
-                      variant="contained"
-                    >
-                      Login with Google
-                    </Button>
-                  </Grid>
-                </Grid>
-                <Box
-                  sx={{
-                    pb: 1,
-                    pt: 3
-                  }}
-                >
-                  <Typography
-                    align="center"
-                    color="textSecondary"
-                    variant="body1"
-                  >
-                    or login with email address
-                  </Typography>
-                </Box>
+
                 <TextField
                   error={Boolean(touched.email && errors.email)}
                   fullWidth
@@ -128,9 +124,9 @@ const Login = () => {
                   margin="normal"
                   name="email"
                   onBlur={handleBlur}
-                  onChange={handleChange}
+                  onChange={handleDataChange}
                   type="email"
-                  value={values.email}
+                  value={data.email}
                   variant="outlined"
                 />
                 <TextField
@@ -141,37 +137,30 @@ const Login = () => {
                   margin="normal"
                   name="password"
                   onBlur={handleBlur}
-                  onChange={handleChange}
+                  onChange={handleDataChange}
                   type="password"
-                  value={values.password}
+                  value={data.password}
                   variant="outlined"
                 />
                 <Box sx={{ py: 2 }}>
                   <Button
-                    color="primary"
+                    // color="primary"
                     disabled={isSubmitting}
                     fullWidth
                     size="large"
                     type="submit"
                     variant="contained"
+                    style={{ backgroundColor: '#99CE85' }}
                   >
                     Sign in now
                   </Button>
                 </Box>
-                <Typography
-                  color="textSecondary"
-                  variant="body1"
-                >
-                  Don&apos;t have an account?
-                  {' '}
-                  <Link
-                    component={RouterLink}
-                    to="/register"
-                    variant="h6"
-                  >
+                {/* <Typography color="textSecondary" variant="body1">
+                  Don&apos;t have an account?{' '}
+                  <Link component={RouterLink} to="/register" variant="h6">
                     Sign up
                   </Link>
-                </Typography>
+                </Typography> */}
               </form>
             )}
           </Formik>

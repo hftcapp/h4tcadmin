@@ -17,50 +17,26 @@ import {
 } from '@material-ui/core';
 import getInitials from 'src/utils/getInitials';
 import Product from '../../assets/product.png';
-import Editproduct from './Editproduct';
-import { getProductImages, deleteProduct } from '../../Connection/Product';
 import { ToastContainer, toast } from 'react-toastify';
 
-const ProductsListResults = ({ products, handleUpdate, ...rest }) => {
+const Highscoretable = ({ products, handleUpdate, ...rest }) => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
-  const [openEditProduct, setOpenEditProduct] = useState(false);
-  const [editProductData, setEditProductData] = useState();
 
-  const handleOpenEditProduct = () => {
-    setOpenEditProduct(!openEditProduct);
-  };
-  const handleEditProduct = product => {
-    console.log(product);
-
-    const fetchProductImages = async () => {
-      let res = await getProductImages({ id: product.imagesId });
-      console.log(res);
-      if (res.data.success) {
-        setEditProductData({
-          ...product,
-          images: res.data.images.images
-        });
-        handleOpenEditProduct();
-      }
-    };
-    fetchProductImages();
-  };
-
-  const handleDelete = async (id, imagesId) => {
-    const res = await deleteProduct({ id, imagesId });
-    if (res.data.success) {
-      toast.success('Product Deleted', {
-        position: toast.POSITION.TOP_RIGHT
-      });
-      handleUpdate();
-    } else {
-      toast.error('Product Deleting Error', {
-        position: toast.POSITION.TOP_RIGHT
-      });
-    }
-  };
+  //   const handleDelete = async (id, imagesId) => {
+  //     const res = await deleteProduct({ id, imagesId });
+  //     if (res.data.success) {
+  //       toast.success('Product Deleted', {
+  //         position: toast.POSITION.TOP_RIGHT
+  //       });
+  //       handleUpdate();
+  //     } else {
+  //       toast.error('Product Deleting Error', {
+  //         position: toast.POSITION.TOP_RIGHT
+  //       });
+  //     }
+  //   };
 
   const handleSelectAll = event => {
     let newSelectedCustomerIds;
@@ -122,8 +98,8 @@ const ProductsListResults = ({ products, handleUpdate, ...rest }) => {
                     <TableCell>Price</TableCell>
                     <TableCell>Quantity</TableCell>
 
-                    <TableCell>Edit</TableCell>
-                    <TableCell>Delete</TableCell>
+                    {/* <TableCell>Edit</TableCell> */}
+                    {/* <TableCell>Delete</TableCell> */}
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -151,24 +127,16 @@ const ProductsListResults = ({ products, handleUpdate, ...rest }) => {
                       <TableCell>{product.price}</TableCell>
                       <TableCell>{product.quantity}</TableCell>
 
-                      <TableCell>
+                      {/* <TableCell>
                         <button
-                          onClick={() => handleEditProduct(product)}
-                          className="btn btn-primary"
-                        >
-                          Edit <i class="far fa-edit"></i>
-                        </button>
-                      </TableCell>
-                      <TableCell>
-                        <button
-                          onClick={() =>
-                            handleDelete(product._id, product.imagesId)
-                          }
+                          //   onClick={() =>
+                          //     handleDelete(product._id, product.imagesId)
+                          //   }
                           className="btn btn-danger"
                         >
                           Delete <i class="far fa-trash-alt"></i>
                         </button>
-                      </TableCell>
+                      </TableCell> */}
                     </TableRow>
                   ))}
                 </TableBody>
@@ -177,20 +145,12 @@ const ProductsListResults = ({ products, handleUpdate, ...rest }) => {
           </PerfectScrollbar>
         </Card>
       </div>
-      {editProductData && (
-        <Editproduct
-          handleOpen={handleOpenEditProduct}
-          open={openEditProduct}
-          data={editProductData}
-          handleUpdate={handleUpdate}
-        />
-      )}
     </div>
   );
 };
 
-ProductsListResults.propTypes = {
+Highscoretable.propTypes = {
   products: PropTypes.array.isRequired
 };
 
-export default ProductsListResults;
+export default Highscoretable;

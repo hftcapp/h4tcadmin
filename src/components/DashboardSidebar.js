@@ -56,6 +56,21 @@ const items = [
     title: 'Quiz'
   },
   {
+    href: '/app/highscore',
+    icon: Book,
+    title: 'High Score products'
+  },
+  {
+    href: '/app/midscore',
+    icon: Book,
+    title: 'Mid Score products'
+  },
+  {
+    href: '/app/lowscore',
+    icon: Book,
+    title: 'Low Score products'
+  },
+  {
     href: '/app/community',
     icon: UserIcon,
     title: 'Community'
@@ -119,7 +134,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
       >
         <Avatar
           component={RouterLink}
-          src={user.avatar}
+          src={window.localStorage.getItem('image')}
           sx={{
             cursor: 'pointer',
             width: 64,
@@ -127,11 +142,11 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
           }}
           to="/app/account"
         />
-        <Typography color="textPrimary" variant="h5">
-          {user.name}
+        <Typography className="mt-2" color="textPrimary" variant="h5">
+          {window.localStorage.getItem('username').toUpperCase()}
         </Typography>
         <Typography color="textSecondary" variant="body2">
-          {user.jobTitle}
+          {window.localStorage.getItem('role').toUpperCase()}
         </Typography>
       </Box>
       <Divider />
