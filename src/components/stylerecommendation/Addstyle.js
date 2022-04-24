@@ -7,9 +7,45 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Imageupload from '../Imageupload';
+import { addStyle } from '../../Connection/Style';
+import { ToastContainer, toast } from 'react-toastify';
 
-export default function Addsalon() {
+export default function Addsalon({ handleUpdate }) {
   const [open, setOpen] = React.useState(false);
+  const [values, setValues] = React.useState({
+    name: '',
+    description: '',
+    images: []
+  });
+
+  const handleChange = evt => {
+    setValues({
+      ...values,
+      [evt.target.name]: evt.target.value
+    });
+  };
+
+  const handleSubmit = async () => {
+    handleClose();
+
+    const res = await addStyle(values);
+    console.log(res);
+    if (res.data.success) {
+      toast.success('Style Added', {
+        position: toast.POSITION.TOP_RIGHT
+      });
+      setValues({
+        name: '',
+        description: '',
+        images: []
+      });
+      handleUpdate();
+    } else {
+      toast.error(res.data.message, {
+        position: toast.POSITION.TOP_RIGHT
+      });
+    }
+  };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -21,12 +57,12 @@ export default function Addsalon() {
 
   const handleSelectedImages = imgs => {
     console.log(imgs);
-    // setValues({ ...values, images: imgs });
-    // setCarryOnDisabled(false);
+    setValues({ ...values, images: imgs });
   };
 
   return (
     <div>
+      {console.log(values)}
       {/* <Button variant="outlined" onClick={handleClickOpen}>
         Open form dialog
       </Button> */}
@@ -47,6 +83,9 @@ export default function Addsalon() {
             type="text"
             fullWidth
             variant="standard"
+            value={values.name}
+            name="name"
+            onChange={handleChange}
           />
 
           <TextField
@@ -56,6 +95,9 @@ export default function Addsalon() {
             rows={4}
             variant="standard"
             fullWidth
+            value={values.description}
+            name="description"
+            onChange={handleChange}
           />
           <br />
 
@@ -65,7 +107,7 @@ export default function Addsalon() {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Add Style</Button>
+          <Button onClick={handleSubmit}>Add Style</Button>
         </DialogActions>
       </Dialog>
     </div>

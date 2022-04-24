@@ -16,63 +16,33 @@ import {
   Typography
 } from '@material-ui/core';
 import getInitials from 'src/utils/getInitials';
-import Salon from '../../assets/salon.png';
-import { getSalonImages, deleteSalon } from '../../Connection/Salon';
-import Editsalon from './Editsalon';
+import Product from '../../assets/product.png';
 import { ToastContainer, toast } from 'react-toastify';
 
-const SalonListResults = ({ salons, handleUpdate, ...rest }) => {
+const Recommendationstable = ({ products, handleUpdate, ...rest }) => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
 
-  const [openEdit, setOpenEdit] = useState(false);
-  const [editData, setEditData] = useState();
-
-  const handleOpenEdit = () => {
-    setOpenEdit(!openEdit);
-  };
-  const handleEdit = salon => {
-    console.log(salon);
-    // setEditData({
-    //   ...salon,
-    //   images: [salon.coverImage]
-    // });
-    // handleOpenEdit();
-
-    const fetchSalonImages = async () => {
-      let res = await getSalonImages({ id: salon.imagesId });
-      console.log(res);
-      if (res.data.success) {
-        setEditData({
-          ...salon,
-          images: res.data.images.images
-        });
-        handleOpenEdit();
-      }
-    };
-    fetchSalonImages();
-  };
-
-  const handleDelete = async (id, imagesId) => {
-    const res = await deleteSalon({ id, imagesId });
-    if (res.data.success) {
-      toast.success('Salon Deleted', {
-        position: toast.POSITION.TOP_RIGHT
-      });
-      handleUpdate();
-    } else {
-      toast.error('Salon Deleting Error', {
-        position: toast.POSITION.TOP_RIGHT
-      });
-    }
-  };
+  //   const handleDelete = async (id, imagesId) => {
+  //     const res = await deleteProduct({ id, imagesId });
+  //     if (res.data.success) {
+  //       toast.success('Product Deleted', {
+  //         position: toast.POSITION.TOP_RIGHT
+  //       });
+  //       handleUpdate();
+  //     } else {
+  //       toast.error('Product Deleting Error', {
+  //         position: toast.POSITION.TOP_RIGHT
+  //       });
+  //     }
+  //   };
 
   const handleSelectAll = event => {
     let newSelectedCustomerIds;
 
     if (event.target.checked) {
-      newSelectedCustomerIds = salons.map(customer => customer.id);
+      newSelectedCustomerIds = products.map(customer => customer.id);
     } else {
       newSelectedCustomerIds = [];
     }
@@ -125,17 +95,19 @@ const SalonListResults = ({ salons, handleUpdate, ...rest }) => {
                 <TableHead>
                   <TableRow>
                     <TableCell>Name</TableCell>
-                    <TableCell>Location</TableCell>
-                    <TableCell>Edit</TableCell>
-                    <TableCell>Delete</TableCell>
+                    <TableCell>Price</TableCell>
+                    <TableCell>Quantity</TableCell>
+
+                    {/* <TableCell>Edit</TableCell> */}
+                    {/* <TableCell>Delete</TableCell> */}
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {salons.map(salon => (
+                  {products.map(product => (
                     <TableRow
                       hover
-                      key={salon.id}
-                      // selected={selectedsalonIds.indexOf(salon.id) !== -1}
+                      key={product.id}
+                      // selected={selectedCustomerIds.indexOf(customer.id) !== -1}
                     >
                       <TableCell>
                         <Box
@@ -144,34 +116,27 @@ const SalonListResults = ({ salons, handleUpdate, ...rest }) => {
                             display: 'flex'
                           }}
                         >
-                          <Avatar src={salon.coverImage} sx={{ mr: 2 }}>
-                            {getInitials(salon.name)}
+                          <Avatar src={product.coverImage} sx={{ mr: 2 }}>
+                            {getInitials(product.name)}
                           </Avatar>
                           <Typography color="textPrimary" variant="body1">
-                            {salon.name}
+                            {product.name}
                           </Typography>
                         </Box>
                       </TableCell>
-                      {/* <TableCell>{salon.email}</TableCell> */}
-                      <TableCell>{salon.location.address}</TableCell>
-                      <TableCell>
+                      <TableCell>{product.price}</TableCell>
+                      <TableCell>{product.quantity}</TableCell>
+
+                      {/* <TableCell>
                         <button
-                          onClick={() => handleEdit(salon)}
-                          className="btn btn-primary"
-                        >
-                          Edit <i class="far fa-edit"></i>
-                        </button>
-                      </TableCell>
-                      <TableCell>
-                        <button
-                          onClick={() =>
-                            handleDelete(salon._id, salon.imagesId)
-                          }
+                          //   onClick={() =>
+                          //     handleDelete(product._id, product.imagesId)
+                          //   }
                           className="btn btn-danger"
                         >
                           Delete <i class="far fa-trash-alt"></i>
                         </button>
-                      </TableCell>
+                      </TableCell> */}
                     </TableRow>
                   ))}
                 </TableBody>
@@ -180,20 +145,12 @@ const SalonListResults = ({ salons, handleUpdate, ...rest }) => {
           </PerfectScrollbar>
         </Card>
       </div>
-      {editData && (
-        <Editsalon
-          handleOpen={handleOpenEdit}
-          open={openEdit}
-          data={editData}
-          handleUpdate={handleUpdate}
-        />
-      )}
     </div>
   );
 };
 
-SalonListResults.propTypes = {
-  salons: PropTypes.array.isRequired
+Recommendationstable.propTypes = {
+  products: PropTypes.array.isRequired
 };
 
-export default SalonListResults;
+export default Recommendationstable;

@@ -33,6 +33,11 @@ const ProductsListResults = ({ products, handleUpdate, ...rest }) => {
   };
   const handleEditProduct = product => {
     console.log(product);
+    setEditProductData({
+      ...product,
+      images: [product.coverImage]
+    });
+    handleOpenEditProduct();
 
     const fetchProductImages = async () => {
       let res = await getProductImages({ id: product.imagesId });
@@ -42,7 +47,7 @@ const ProductsListResults = ({ products, handleUpdate, ...rest }) => {
           ...product,
           images: res.data.images.images
         });
-        handleOpenEditProduct();
+        // handleOpenEditProduct();
       }
     };
     fetchProductImages();

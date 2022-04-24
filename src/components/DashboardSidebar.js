@@ -71,6 +71,11 @@ const items = [
     title: 'Low Score products'
   },
   {
+    href: '/app/quotes',
+    icon: AlignCenter,
+    title: 'Quotes'
+  },
+  {
     href: '/app/community',
     icon: UserIcon,
     title: 'Community'
@@ -80,11 +85,7 @@ const items = [
     icon: CreditCard,
     title: 'Payment Details'
   },
-  {
-    href: '/app/quotes',
-    icon: AlignCenter,
-    title: 'Quotes'
-  },
+
   {
     href: '/app/productssuggestion',
     icon: ShoppingBagIcon,

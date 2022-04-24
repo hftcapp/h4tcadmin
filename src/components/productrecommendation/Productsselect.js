@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import PerfectScrollbar from 'react-perfect-scrollbar';
@@ -18,16 +18,28 @@ import {
 import getInitials from 'src/utils/getInitials';
 import Product from '../../assets/product.png';
 
-const ProductsListResults = ({ customers, ...rest }) => {
+const ProductsListResults = ({
+  products,
+  selectedProductsIds,
+  handleSubmit,
+  ...rest
+}) => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
+  const [existingProductsIds, setExistingProductsids] = useState();
+
+  useEffect(() => {
+    setExistingProductsids(selectedProductsIds);
+  }, []);
+
+  console.log(selectedProductsIds);
 
   const handleSelectAll = event => {
     let newSelectedCustomerIds;
 
     if (event.target.checked) {
-      newSelectedCustomerIds = customers.map(customer => customer.id);
+      newSelectedCustomerIds = products.map(customer => customer.id);
     } else {
       newSelectedCustomerIds = [];
     }
@@ -70,6 +82,18 @@ const ProductsListResults = ({ customers, ...rest }) => {
     setPage(newPage);
   };
 
+  const handleRemove = id => {
+    let newData = existingProductsIds.filter(existingId => existingId !== id);
+    setExistingProductsids(newData);
+    handleSubmit(newData);
+  };
+
+  const handleAdd = id => {
+    let newData = [...existingProductsIds, id];
+    setExistingProductsids([...existingProductsIds, id]);
+    handleSubmit(newData);
+  };
+
   return (
     <Card {...rest}>
       <PerfectScrollbar>
@@ -85,11 +109,11 @@ const ProductsListResults = ({ customers, ...rest }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {customers.map(customer => (
+              {products.map(product => (
                 <TableRow
                   hover
-                  key={customer.id}
-                  selected={selectedCustomerIds.indexOf(customer.id) !== -1}
+                  key={products._id}
+                  // selected={selectedproductsIds.indexOf(products.id) !== -1}
                 >
                   <TableCell>
                     <Box
@@ -98,23 +122,34 @@ const ProductsListResults = ({ customers, ...rest }) => {
                         display: 'flex'
                       }}
                     >
-                      <Avatar src={Product} sx={{ mr: 2 }}>
-                        {getInitials(customer.name)}
+                      <Avatar src={product.coverImage} sx={{ mr: 2 }}>
+                        {getInitials(product.name)}
                       </Avatar>
                       <Typography color="textPrimary" variant="body1">
-                        {customer.name}
+                        {product.name}
                       </Typography>
                     </Box>
                   </TableCell>
-                  <TableCell>{customer.email}</TableCell>
-                  <TableCell>
-                    {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
-                  </TableCell>
+                  <TableCell>{product.price}</TableCell>
+                  <TableCell>{product.quantity}</TableCell>
 
                   <TableCell>
-                    <button className="btn btn-primary">
-                      Select <i class="far fa-hand-pointer"></i>
-                    </button>
+                    {console.log(existingProductsIds)}
+                    {existingProductsIds?.indexOf(product._id) === -1 ? (
+                      <button
+                        onClick={() => handleAdd(product._id)}
+                        className="btn btn-primary"
+                      >
+                        Select <i class="far fa-hand-pointer"></i>
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => handleRemove(product._id)}
+                        className="btn btn-primary"
+                      >
+                        Un Select <i class="far fa-hand-pointer"></i>
+                      </button>
+                    )}
                   </TableCell>
                   {/* <TableCell>
                     <button className="btn btn-danger">
