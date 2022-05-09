@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useEffect } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -7,17 +8,22 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Imageupload from '../Imageupload';
-import { addQuestion } from '../../Connection/Quiz';
+import { editQuestion } from '../../Connection/Weekquiz';
 import { ToastContainer, toast } from 'react-toastify';
 
-export default function Addproduct({ handleUpdate }) {
-  const [open, setOpen] = React.useState(false);
+export default function Editquestion({ handleUpdate, open, data, handleOpen }) {
   const [values, setValues] = React.useState({
-    question: '',
-    option1: '',
-    option2: '',
-    option3: ''
+    handleUpdate,
+    data,
+    open,
+    handleOpen
   });
+  //   const [productImages, setProductImages] = React.useState();
+
+  useEffect(() => {
+    setValues(data);
+    console.log(data);
+  }, [data]);
 
   const handleChange = evt => {
     setValues({
@@ -27,31 +33,30 @@ export default function Addproduct({ handleUpdate }) {
   };
 
   const handleSubmit = async () => {
-    handleClose();
+    handleOpen();
 
-    const res = await addQuestion(values);
+    const res = await editQuestion(values);
     console.log(res);
     if (res.data.success) {
-      toast.success('Question Added', {
+      toast.success('Question updated', {
         position: toast.POSITION.TOP_RIGHT
       });
-      setValues({
-        question: '',
-        option1: '',
-        option2: '',
-        option3: ''
-      });
+
       handleUpdate();
+    } else {
+      toast.error(res.json.message, {
+        position: toast.POSITION.TOP_RIGHT
+      });
     }
   };
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+  // const handleClickOpen = () => {
+  //   setOpen(true);
+  // };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+  // const handleOpen = () => {
+  //   setOpen(false);
+  // };
 
   const handleSelectedImages = imgs => {
     console.log(imgs);
@@ -64,14 +69,14 @@ export default function Addproduct({ handleUpdate }) {
       {/* <Button variant="outlined" onClick={handleClickOpen}>
         Open form dialog
       </Button> */}
-      <button className="btn btn-success " onClick={handleClickOpen}>
-        <i class="fas fa-plus"></i> Add Question
-      </button>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Add Question</DialogTitle>
+      {/* <button className="btn btn-success " onClick={handleOpen}>
+        <i class="fas fa-plus"></i>  Question
+      </button> */}
+      <Dialog open={open} onClose={handleOpen}>
+        <DialogTitle>Edit Question</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Add the Questions for the build Your Profile Quiz
+            Edit the Questions for the build Your Profile Quiz
           </DialogContentText>
           <TextField
             autoFocus
@@ -120,8 +125,8 @@ export default function Addproduct({ handleUpdate }) {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleSubmit}>Add Question</Button>
+          <Button onClick={handleOpen}>Cancel</Button>
+          <Button onClick={handleSubmit}>Update Question</Button>
         </DialogActions>
       </Dialog>
     </div>

@@ -3,7 +3,7 @@ import axios from 'axios';
 let url = 'https://hftcapi.herokuapp.com';
 
 const getQuestions = async () => {
-  let res = await axios.get(`${url}/api/quiz/getquestions`);
+  let res = await axios.get(`${url}/api/weekquiz/getquestions`);
 
   console.log(res);
   return res;
@@ -11,7 +11,7 @@ const getQuestions = async () => {
 
 const addQuestion = async data => {
   console.log(data);
-  let res = await axios.post(`${url}/api/quiz/addquestion`, data);
+  let res = await axios.post(`${url}/api/weekquiz/addquestion`, data);
 
   console.log(res);
   return res;
@@ -19,7 +19,7 @@ const addQuestion = async data => {
 
 const editQuestion = async data => {
   console.log(data);
-  let res = await axios.post(`${url}/api/quiz/editquestion`, data);
+  let res = await axios.post(`${url}/api/weekquiz/editquestion`, data);
 
   console.log(res);
   return res;
@@ -27,7 +27,7 @@ const editQuestion = async data => {
 
 const deleteQuestion = async data => {
   console.log(data);
-  let res = await axios.post(`${url}/api/quiz/deletequestion`, data);
+  let res = await axios.post(`${url}/api/weekquiz/deletequestion`, data);
 
   console.log(res);
   return res;

@@ -1,6 +1,6 @@
 import axios from 'axios';
-let url = 'http://localhost:3001';
-// let url = 'https://hftcapi.herokuapp.com';
+// let url = 'http://localhost:3001';
+let url = 'https://hftcapi.herokuapp.com';
 
 const getQuotes = async () => {
   let res = await axios.get(`${url}/api/quote/getquotes`);

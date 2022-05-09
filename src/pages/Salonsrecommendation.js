@@ -6,6 +6,7 @@ import SalonListResults from '../components/salon/SalonListResults';
 import Addsalon from '../components/salon/Addsalon';
 import { getSalons } from '../Connection/Salon';
 import { ToastContainer, toast } from 'react-toastify';
+import Maps from '../components/Maps';
 
 const Selectrecommendation = () => {
   const [salons, setSalons] = useState();

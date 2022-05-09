@@ -24,7 +24,8 @@ import {
   CreditCard,
   Scissors,
   AlignCenter,
-  Link
+  Link,
+  Image
 } from 'react-feather';
 import NavItem from './NavItem';
 
@@ -56,6 +57,16 @@ const items = [
     title: 'Quiz'
   },
   {
+    href: '/app/weekquiz',
+    icon: Book,
+    title: 'Week Quiz'
+  },
+  {
+    href: '/app/monthquiz',
+    icon: Book,
+    title: 'Month Quiz'
+  },
+  {
     href: '/app/highscore',
     icon: Book,
     title: 'High Score products'
@@ -80,11 +91,11 @@ const items = [
     icon: UserIcon,
     title: 'Community'
   },
-  {
-    href: '/app/payment',
-    icon: CreditCard,
-    title: 'Payment Details'
-  },
+  // {
+  //   href: '/app/payment',
+  //   icon: CreditCard,
+  //   title: 'Payment Details'
+  // },
 
   {
     href: '/app/productssuggestion',
@@ -100,6 +111,16 @@ const items = [
     href: '/app/styles',
     icon: Link,
     title: 'Styles Recommendations'
+  },
+  {
+    href: '/app/appimages',
+    icon: Image,
+    title: 'App Images'
+  },
+  {
+    href: '/app/suggestions',
+    icon: AlignCenter,
+    title: 'Suggestions'
   }
   // {
   //   href: '/404',

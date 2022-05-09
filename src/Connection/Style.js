@@ -1,6 +1,6 @@
 import axios from 'axios';
-let url = 'http://localhost:3001';
-// let url = 'https://hftcapi.herokuapp.com';
+// let url = 'http://localhost:3001';
+let url = 'https://hftcapi.herokuapp.com';
 
 const getStyles = async () => {
   let res = await axios.get(`${url}/api/style/getstyles`);

@@ -10,6 +10,8 @@ import ProductList from 'src/pages/ProductList';
 import Register from 'src/pages/Register';
 import Settings from 'src/pages/Settings';
 import Quiz from 'src/pages/Quiz';
+import Weekquiz from 'src/pages/Weekquiz';
+import Monthquiz from 'src/pages/Monthquiz';
 import Community from 'src/pages/Community';
 import Paymentdetails from 'src/pages/Paymentdetails';
 import Quotes from 'src/pages/Quotes';
@@ -19,6 +21,8 @@ import Stylerecommendation from 'src/pages/Stylerecommendation';
 import Highscore from 'src/pages/Highscore';
 import Midscore from 'src/pages/Midscore';
 import Lowscore from 'src/pages/Lowscore';
+import Appimages from 'src/pages/Appimages';
+import Suggestions from 'src/pages/Suggestions';
 
 export const Authroutes = [
   {
@@ -31,16 +35,19 @@ export const Authroutes = [
       { path: 'products', element: <ProductList /> },
       { path: 'settings', element: <Settings /> },
       { path: 'quiz', element: <Quiz /> },
+      { path: 'weekquiz', element: <Weekquiz /> },
+      { path: 'monthquiz', element: <Monthquiz /> },
       { path: 'highscore', element: <Highscore /> },
       { path: 'midscore', element: <Midscore /> },
       { path: 'lowscore', element: <Lowscore /> },
 
       { path: 'community', element: <Community /> },
-      { path: 'payment', element: <Paymentdetails /> },
+      { path: 'appimages', element: <Appimages /> },
       { path: 'quotes', element: <Quotes /> },
       { path: 'productssuggestion', element: <Productrecommendation /> },
       { path: 'salons', element: <Salonsrecommendation /> },
       { path: 'styles', element: <Stylerecommendation /> },
+      { path: 'suggestions', element: <Suggestions /> },
       { path: '/', element: <Navigate to="/app/dashboard" /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]

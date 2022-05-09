@@ -10,6 +10,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Imageupload from '../Imageupload';
 import { editSalon } from '../../Connection/Salon';
 import { ToastContainer, toast } from 'react-toastify';
+import Maps from '../Maps';
 
 export default function Editstyle({ handleUpdate, data, open, handleOpen }) {
   //   const [open, setOpen] = React.useState(false);
@@ -57,6 +58,19 @@ export default function Editstyle({ handleUpdate, data, open, handleOpen }) {
         position: toast.POSITION.TOP_RIGHT
       });
     }
+  };
+
+  const handleLocation = address => {
+    console.log(address);
+    // setCurrentAddress(address.address);
+    setValues({
+      ...values,
+      location: {
+        ...values.location,
+        lat: address.mapPosition.lat,
+        lng: address.mapPosition.lng
+      }
+    });
   };
 
   //   const handleClickOpen = () => {
@@ -131,6 +145,12 @@ export default function Editstyle({ handleUpdate, data, open, handleOpen }) {
             <Imageupload
               images={values.images}
               selectedImages={handleSelectedImages}
+            />
+            <br />
+            <br />
+            <Maps
+              initialValues={values.location}
+              handleAddress={handleLocation}
             />
           </DialogContent>
           <DialogActions>

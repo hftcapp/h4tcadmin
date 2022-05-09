@@ -9,6 +9,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Imageupload from '../Imageupload';
 import { ToastContainer, toast } from 'react-toastify';
 import { addSalon } from '../../Connection/Salon';
+import Maps from '../Maps';
 
 export default function Addsalon({}) {
   const [open, setOpen] = React.useState(false);
@@ -20,7 +21,7 @@ export default function Addsalon({}) {
     location: {
       address: '',
       lat: '',
-      lan: ''
+      lng: ''
     }
   });
 
@@ -37,6 +38,19 @@ export default function Addsalon({}) {
       location: {
         ...values.location,
         address: evt.target.value
+      }
+    });
+  };
+
+  const handleLocation = address => {
+    console.log(address);
+    // setCurrentAddress(address.address);
+    setValues({
+      ...values,
+      location: {
+        ...values.location,
+        lat: address.mapPosition.lat,
+        lng: address.mapPosition.lng
       }
     });
   };
@@ -83,6 +97,7 @@ export default function Addsalon({}) {
 
   return (
     <div>
+      {console.log(values)}
       {/* <Button variant="outlined" onClick={handleClickOpen}>
         Open form dialog
       </Button> */}
@@ -120,6 +135,7 @@ export default function Addsalon({}) {
             onChange={handleChange}
           />
           <br />
+
           <TextField
             id="standard-multiline-static"
             label="Address of Location"
@@ -131,10 +147,14 @@ export default function Addsalon({}) {
             // name="description"
             onChange={handleAddressChange}
           />
-
           <br />
           <br />
           <Imageupload selectedImages={handleSelectedImages} />
+          <br />
+          <Maps handleAddress={handleLocation} />
+
+          <br />
+          <br />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>

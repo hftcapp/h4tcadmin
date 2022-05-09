@@ -7,7 +7,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Imageupload from '../Imageupload';
-import { addQuestion } from '../../Connection/Quiz';
+import { addQuestion } from '../../Connection/Monthquiz';
 import { ToastContainer, toast } from 'react-toastify';
 
 export default function Addproduct({ handleUpdate }) {

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useEffect } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -7,17 +8,21 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Imageupload from '../Imageupload';
-import { addQuestion } from '../../Connection/Quiz';
+import { addList } from '../../Connection/Suggestions';
 import { ToastContainer, toast } from 'react-toastify';
 
-export default function Addproduct({ handleUpdate }) {
+export default function Addsuggestion({ handleUpdate, name }) {
   const [open, setOpen] = React.useState(false);
   const [values, setValues] = React.useState({
-    question: '',
-    option1: '',
-    option2: '',
-    option3: ''
+    suggestion: ''
   });
+
+  // useEffect(() => {
+  //   setValues({
+  //     ...values,
+  //     name: name
+  //   });
+  // }, [name]);
 
   const handleChange = evt => {
     setValues({
@@ -26,27 +31,27 @@ export default function Addproduct({ handleUpdate }) {
     });
   };
 
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
   const handleSubmit = async () => {
     handleClose();
-
-    const res = await addQuestion(values);
-    console.log(res);
+    let res = await addList({ suggestion: values.suggestion, name: name });
     if (res.data.success) {
-      toast.success('Question Added', {
+      toast.success('Suggestion Added', {
         position: toast.POSITION.TOP_RIGHT
       });
       setValues({
-        question: '',
-        option1: '',
-        option2: '',
-        option3: ''
+        name: '',
+        suggestion: ''
       });
       handleUpdate();
+    } else {
+      toast.error(res.data.message, {
+        position: toast.POSITION.TOP_RIGHT
+      });
     }
-  };
-
-  const handleClickOpen = () => {
-    setOpen(true);
   };
 
   const handleClose = () => {
@@ -65,63 +70,30 @@ export default function Addproduct({ handleUpdate }) {
         Open form dialog
       </Button> */}
       <button className="btn btn-success " onClick={handleClickOpen}>
-        <i class="fas fa-plus"></i> Add Question
+        <i class="fas fa-plus"></i> Add Suggestion
       </button>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Add Question</DialogTitle>
+        <DialogTitle>Add Suggestion</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Add the Questions for the build Your Profile Quiz
+            Add new Suggestion for showing up on the wrttings Panel in Journals
           </DialogContentText>
           <TextField
             autoFocus
             margin="dense"
             id="name"
-            label="Question"
+            label="Suggestion"
             type="text"
             fullWidth
             variant="standard"
-            value={values.question}
-            name="question"
+            value={values.suggestion}
             onChange={handleChange}
-          />
-          <TextField
-            margin="dense"
-            id="name"
-            label="Option 1 (This option should represent the Week/Light State of hairs)"
-            type="text"
-            fullWidth
-            variant="standard"
-            value={values.option1}
-            name="option1"
-            onChange={handleChange}
-          />
-          <TextField
-            margin="dense"
-            id="name"
-            label="Option 2 (This option should represent the middle/normal State of Hairs)"
-            type="text"
-            fullWidth
-            variant="standard"
-            value={values.option2}
-            name="option2"
-            onChange={handleChange}
-          />
-          <TextField
-            margin="dense"
-            id="name"
-            label="Option 3 (This option should represent the Strong/Great State of Hairs)"
-            type="text"
-            fullWidth
-            variant="standard"
-            value={values.option3}
-            name="option3"
-            onChange={handleChange}
+            name="suggestion"
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleSubmit}>Add Question</Button>
+          <Button onClick={handleSubmit}>Add Suggestion</Button>
         </DialogActions>
       </Dialog>
     </div>
