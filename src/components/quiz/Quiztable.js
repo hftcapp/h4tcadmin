@@ -18,7 +18,8 @@ import {
 import getInitials from 'src/utils/getInitials';
 import Product from '../../assets/product.png';
 import Editquestion from './Editquestion';
-import { deleteQuestion } from '../../Connection/Quiz';
+import Connectquestion from './Connectquestion';
+// import { deleteQuestion } from '../../Connection/Quiz';
 import { ToastContainer, toast } from 'react-toastify';
 
 const Quiztable = ({ questions, handleUpdate, ...rest }) => {
@@ -27,10 +28,15 @@ const Quiztable = ({ questions, handleUpdate, ...rest }) => {
   const [page, setPage] = useState(0);
 
   const [openEditQuestion, setOpenEditQuestion] = useState(false);
+  const [openConnectQuestion, setOpenConnectQuestion] = useState(false);
   const [editQuestionData, setEditQuestionData] = useState();
+  const [connectQuestionData, setConnectQuestionData] = useState();
 
   const handleOpenEditQuestion = () => {
     setOpenEditQuestion(!openEditQuestion);
+  };
+  const handleOpenConnectQuestion = () => {
+    setOpenConnectQuestion(!openConnectQuestion);
   };
   const handleEditQuestion = question => {
     console.log(question);
@@ -40,20 +46,28 @@ const Quiztable = ({ questions, handleUpdate, ...rest }) => {
     handleOpenEditQuestion();
   };
 
-  const handleDelete = async id => {
-    let res = await deleteQuestion({ id });
-    console.log(res);
-    if (res.data.success) {
-      toast.success('Question Deleted', {
-        position: toast.POSITION.TOP_RIGHT
-      });
-      handleUpdate();
-    } else {
-      toast.error(res.json.message, {
-        position: toast.POSITION.TOP_RIGHT
-      });
-    }
+  const handleConnectQuestion = question => {
+    console.log(question);
+    setConnectQuestionData({
+      ...question
+    });
+    handleOpenConnectQuestion();
   };
+
+  // const handleDelete = async id => {
+  //   let res = await deleteQuestion({ id });
+  //   console.log(res);
+  //   if (res.data.success) {
+  //     toast.success('Question Deleted', {
+  //       position: toast.POSITION.TOP_RIGHT
+  //     });
+  //     handleUpdate();
+  //   } else {
+  //     toast.error(res.json.message, {
+  //       position: toast.POSITION.TOP_RIGHT
+  //     });
+  //   }
+  // };
 
   const handleSelectAll = event => {
     let newSelectedCustomerIds;
@@ -113,8 +127,9 @@ const Quiztable = ({ questions, handleUpdate, ...rest }) => {
                   <TableRow>
                     <TableCell>Question</TableCell>
                     <TableCell>Options</TableCell>
+                    <TableCell>Connect questions</TableCell>
                     <TableCell>Edit</TableCell>
-                    <TableCell>Delete</TableCell>
+                    {/* <TableCell>Delete</TableCell> */}
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -131,38 +146,47 @@ const Quiztable = ({ questions, handleUpdate, ...rest }) => {
                             display: 'flex'
                           }}
                         >
-                          {/* <Avatar src={Product} sx={{ mr: 2 }}>
-                      {getInitials(question.name)}
-                    </Avatar> */}
                           <Typography color="textPrimary" variant="body1">
                             {question.question}
                           </Typography>
                         </Box>
                       </TableCell>
                       <TableCell>
-                        {question.option1} , {question.option2} ,{' '}
-                        {question.option3}
+                        {question.options.map(option => (
+                          <span>{option.answer}, </span>
+                        ))}
                       </TableCell>
                       {/* <TableCell>
                   {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
                 </TableCell> */}
 
                       <TableCell>
+                        {' '}
+                        <button
+                          onClick={() => handleConnectQuestion(question)}
+                          className="btn  btn-success d-flex"
+                        >
+                          Connect <i class="far fa-edit m-1"></i>
+                        </button>
+                      </TableCell>
+
+                      <TableCell>
+                        {' '}
                         <button
                           onClick={() => handleEditQuestion(question)}
-                          className="btn btn-primary"
+                          className="btn  btn-primary d-flex"
                         >
-                          Edit <i class="far fa-edit"></i>
+                          Edit <i class="far fa-edit m-1"></i>
                         </button>
                       </TableCell>
-                      <TableCell>
+                      {/* <TableCell>
                         <button
                           onClick={() => handleDelete(question._id)}
-                          className="btn btn-danger"
+                          className="btn btn-danger d-flex"
                         >
-                          Delete <i class="far fa-trash-alt"></i>
+                          Delete <i class="far fa-trash-alt m-1"></i>
                         </button>
-                      </TableCell>
+                      </TableCell> */}
                     </TableRow>
                   ))}
                 </TableBody>
@@ -177,6 +201,15 @@ const Quiztable = ({ questions, handleUpdate, ...rest }) => {
           open={openEditQuestion}
           data={editQuestionData}
           handleUpdate={handleUpdate}
+        />
+      )}
+      {connectQuestionData && (
+        <Connectquestion
+          handleOpen={handleOpenConnectQuestion}
+          open={openConnectQuestion}
+          data={connectQuestionData}
+          handleUpdate={handleUpdate}
+          questions={questions}
         />
       )}
     </div>

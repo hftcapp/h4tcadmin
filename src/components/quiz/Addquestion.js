@@ -9,17 +9,24 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Imageupload from '../Imageupload';
 import { addQuestion } from '../../Connection/Quiz';
 import { ToastContainer, toast } from 'react-toastify';
+import { v4 as uuid } from 'uuid';
+import Checkbox from '@mui/material/Checkbox';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
-export default function Addproduct({ handleUpdate }) {
+export default function Addquestion({ handleUpdate }) {
   const [open, setOpen] = React.useState(false);
   const [values, setValues] = React.useState({
     question: '',
-    option1: '',
-    option2: '',
-    option3: ''
+    options: [],
+    tips: '',
+    firstQuestion: false,
+    lastQuestion: false
   });
+  const [options, setOptions] = React.useState([]);
 
   const handleChange = evt => {
+    console.log(evt.target.value);
     setValues({
       ...values,
       [evt.target.name]: evt.target.value
@@ -27,21 +34,39 @@ export default function Addproduct({ handleUpdate }) {
   };
 
   const handleSubmit = async () => {
-    handleClose();
+    // console.log(values, 'i am values');
+    // return;
+    if (options.length > 10) {
+      toast.error('You cannot create more than 10 Options', {
+        position: toast.POSITION.TOP_RIGHT
+      });
+      return;
+    }
+    setValues({
+      ...values,
+      options: options
+    });
 
-    const res = await addQuestion(values);
+    const res = await addQuestion({ ...values, options: options });
     console.log(res);
-    if (res.data.success) {
-      toast.success('Question Added', {
+    if (res.success === true) {
+      toast.success(res.message, {
         position: toast.POSITION.TOP_RIGHT
       });
       setValues({
         question: '',
-        option1: '',
-        option2: '',
-        option3: ''
+        options: [],
+        tips: '',
+        firstQuestion: false,
+        lastQuestion: false
       });
+      setOptions([]);
+      handleClose();
       handleUpdate();
+    } else {
+      toast.error(res.message, {
+        position: toast.POSITION.TOP_RIGHT
+      });
     }
   };
 
@@ -53,10 +78,58 @@ export default function Addproduct({ handleUpdate }) {
     setOpen(false);
   };
 
-  const handleSelectedImages = imgs => {
-    console.log(imgs);
-    // setValues({ ...values, images: imgs });
-    // setCarryOnDisabled(false);
+  const handleAddOption = () => {
+    console.log(options.length);
+    if (options.length + 1 > 10) {
+      toast.error('You cannot create more than 10 Options', {
+        position: toast.POSITION.TOP_RIGHT
+      });
+      return;
+    }
+    setOptions([
+      ...options,
+      { answer: '', nextQuestionId: '', optionId: uuid(), weight: 0 }
+    ]);
+  };
+
+  const handleOptionChange = (value, optionId, optionName) => {
+    console.log(value, optionId);
+    if (optionName === 'weight' && Number(value) > 10) {
+      toast.error('You cannot set weight more than 10', {
+        position: toast.POSITION.TOP_RIGHT
+      });
+      return;
+    }
+    let updatedOptions = options.map(option => {
+      if (option.optionId === optionId) {
+        return {
+          ...option,
+          [optionName]: optionName === 'weight' ? Number(value) : value
+        };
+      } else {
+        return option;
+      }
+    });
+    console.log(updatedOptions, 'i am updated');
+    setOptions(updatedOptions);
+  };
+  const handleDeleteOption = optionId => {
+    let filteredOptions = options.filter(
+      option => option.optionId !== optionId
+    );
+    setOptions(filteredOptions);
+  };
+  const handleFirstQuestion = event => {
+    setValues({
+      ...values,
+      firstQuestion: event.target.checked
+    });
+  };
+  const handleLastQuestion = event => {
+    setValues({
+      ...values,
+      lastQuestion: event.target.checked
+    });
   };
 
   return (
@@ -85,39 +158,99 @@ export default function Addproduct({ handleUpdate }) {
             name="question"
             onChange={handleChange}
           />
+          {options?.map((option, i) => {
+            return (
+              <div key={option.optionId} className="d-flex">
+                <TextField
+                  margin="dense"
+                  id={`${i}`}
+                  label={`Option ${i + 1}`}
+                  type="text"
+                  fullWidth
+                  variant="standard"
+                  value={option.answer}
+                  name={option.optionId}
+                  onChange={evt =>
+                    handleOptionChange(
+                      evt.target.value,
+                      option.optionId,
+                      'answer'
+                    )
+                  }
+                />
+                <TextField
+                  className="mx-1"
+                  margin="dense"
+                  id={`${i}`}
+                  label={`Option Weight (1 to 10)`}
+                  type="number"
+                  fullWidth
+                  variant="standard"
+                  value={option.weight}
+                  name={option.optionId}
+                  onChange={evt =>
+                    handleOptionChange(
+                      evt.target.value,
+                      option.optionId,
+                      'weight'
+                    )
+                  }
+                />
+                <div>
+                  {' '}
+                  <button
+                    onClick={() => handleDeleteOption(option.optionId)}
+                    className="btn btn-sm btn-danger mt-4"
+                  >
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+
+          <button
+            className="btn btn-sm mt-2 btn-success "
+            onClick={handleAddOption}
+          >
+            <i class="fas fa-plus"></i> Add Option
+          </button>
           <TextField
+            autoFocus
             margin="dense"
             id="name"
-            label="Option 1 (This option should represent the Week/Light State of hairs)"
+            label="Tips"
             type="text"
             fullWidth
             variant="standard"
-            value={values.option1}
-            name="option1"
+            value={values.tips}
+            name="tips"
             onChange={handleChange}
           />
-          <TextField
-            margin="dense"
-            id="name"
-            label="Option 2 (This option should represent the middle/normal State of Hairs)"
-            type="text"
-            fullWidth
-            variant="standard"
-            value={values.option2}
-            name="option2"
-            onChange={handleChange}
-          />
-          <TextField
-            margin="dense"
-            id="name"
-            label="Option 3 (This option should represent the Strong/Great State of Hairs)"
-            type="text"
-            fullWidth
-            variant="standard"
-            value={values.option3}
-            name="option3"
-            onChange={handleChange}
-          />
+          <FormGroup>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={values.firstQuestion}
+                  onChange={handleFirstQuestion}
+                  inputProps={{ 'aria-label': 'controlled' }}
+                />
+              }
+              label="Is it the First Question of the Quiz?"
+            />
+          </FormGroup>
+          <FormGroup>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={values.lastQuestion}
+                  onChange={handleLastQuestion}
+                  inputProps={{ 'aria-label': 'controlled' }}
+                />
+              }
+              label="Is it the Last Question of the Quiz?"
+            />
+          </FormGroup>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>

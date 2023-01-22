@@ -54,7 +54,7 @@ const items = [
   {
     href: '/app/quiz',
     icon: Book,
-    title: 'Quiz'
+    title: 'Hair Profile Quiz'
   },
   {
     href: '/app/weekquiz',

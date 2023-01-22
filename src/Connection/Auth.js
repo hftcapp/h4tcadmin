@@ -1,6 +1,7 @@
 import axios from 'axios';
 // let url = 'http://localhost:3001';
-let url = 'https://hftcapi.herokuapp.com';
+// let url = 'https://hftcapi.herokuapp.com';
+import url from "./API/api";
 
 const loginUser = async data => {
   console.log(data);
